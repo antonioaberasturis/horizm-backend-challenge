@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\PostsApiController;
-use Application\Api\Post\PostGetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Application\Api\Post\PostGetController;
+use App\Http\Controllers\PostsApiController;
+use Application\Api\Post\PostsTopGetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +19,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('posts')->group(function(){
     Route::get('/{id}', [PostGetController::class, '__invoke'])->whereUuid('id');
+    Route::get('/top', [PostsTopGetController::class, '__invoke']);
 });

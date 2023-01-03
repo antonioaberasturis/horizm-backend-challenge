@@ -15,12 +15,14 @@ class PostFactory extends Factory
 
     public function definition(): array
     {
+        $faker = FakerFactory::create();
+        
         return [
-            'id' => FakerFactory::create()->uuid(),
+            'id' => $faker->uuid(),
             'user_id' => UserFactory::class,
-            'title' => FakerFactory::create()->realText(150),
-            'body' => FakerFactory::create()->realText(250),
-            'rating' => FakerFactory::create()->numberBetween(1, 5),
+            'title' => $faker->realText(150),
+            'body' => $faker->realText(250),
+            'rating' => $faker->numberBetween(1, 5),
         ];
     }
 
@@ -49,6 +51,13 @@ class PostFactory extends Factory
     {
         return $this->state(fn(array $attributes) => [
                 'body' => $body,
+        ]);
+    }
+
+    public function rating(int $rating): static
+    {
+        return $this->state(fn(array $attributes) => [
+                'rating' => $rating,
         ]);
     }
 }

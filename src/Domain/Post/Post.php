@@ -27,6 +27,10 @@ class Post extends Model
         'rating',
     ];
 
+    protected $casts = [
+        'rating' => 'int',
+    ];
+
     public static function newFactory(): PostFactory
     {
         return new PostFactory();
@@ -60,5 +64,10 @@ class Post extends Model
     public function getBody(): string
     {
         return $this->body;
+    }
+
+    public function getRating(): int
+    {
+        return $this->rating;
     }
 }
