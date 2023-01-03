@@ -8,6 +8,7 @@ use Shared\ApiController;
 use Illuminate\Http\Request;
 use Domain\Post\Actions\PostWithUserFinderAction;
 use Domain\Post\DataTransferObjects\FindPostData;
+use Domain\Post\Resources\PostByIdResource;
 
 class PostGetController extends ApiController
 {
@@ -20,8 +21,8 @@ class PostGetController extends ApiController
     {
         $findPostWithUserData = new FindPostData($id);
 
-        $postResource = $this->postWithUserfinder->__invoke($findPostWithUserData);
+        $post = $this->postWithUserfinder->__invoke($findPostWithUserData);
 
-        return response()->json($postResource);
+        return response()->json(new PostByIdResource($post));
     }
 }

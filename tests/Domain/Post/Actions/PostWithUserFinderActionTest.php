@@ -31,14 +31,13 @@ class PostWithUserFinderActionTest extends PostModuleUnitTestCase
         $user = User::factory()->make();
         $post = Post::factory()->id($findPostData->id())->userId($user->getId())->make();
         $post->setRelation('user', $user);
-        $postByIdResrouce = PostByIdResourceFactory::fromPost($post);
 
         $this->shouldFindWithUser($findPostData->id(), $post);
 
-        $resource = $this->finder->__invoke($findPostData);
+        $postResponse = $this->finder->__invoke($findPostData);
 
-        $this->assertEquals($findPostData->id(), $resource->toArray()['id']);
-        $this->assertEquals($postByIdResrouce->toArray(), $resource->toArray());
+        $this->assertEquals($user, $postResponse->getUser());
+        $this->assertEquals($post, $postResponse);
     }
 
     public function testShouldThrowExceptionWhenFindNotExistingPost(): void

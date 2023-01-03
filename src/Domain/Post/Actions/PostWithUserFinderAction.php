@@ -15,7 +15,7 @@ class PostWithUserFinderAction
         private Post $post
     ) {
     }
-    public function __invoke(FindPostData $data): PostByIdResource
+    public function __invoke(FindPostData $data): ?Post
     {
         /** @var Post $post */
         $post = $this->post->query()->findWithUser($data->id());
@@ -24,6 +24,6 @@ class PostWithUserFinderAction
             throw new PostNotFoundException();
         }
 
-        return new PostByIdResource($post);
+        return $post;
     }
 }
