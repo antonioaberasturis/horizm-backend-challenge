@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Domain\Post\Exeptions\PostNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -36,6 +37,14 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        $this->renderable(function (Throwable $exception) {
+            
+            return match(get_class($exception)){
+                PostNotFoundException::class => response()->json($exception->getMessage(), 404),
+                default => response()->json('', 404),
+            };
         });
     }
 }
