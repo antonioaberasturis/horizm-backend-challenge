@@ -13,4 +13,9 @@ class UserQueryBuilder extends Builder
     {
         return $this->with(['top_post'])->get();
     }
+
+    public function searchAllOrderedByRatingWithPosts(): UserCollection
+    {
+        return $this->with(['posts'])->orderBy('rating')->get();
+    }
 }

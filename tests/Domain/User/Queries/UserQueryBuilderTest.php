@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Tests\Domain\User\Queries;
 
 use Domain\Post\Post;
@@ -9,7 +7,7 @@ use Domain\User\User;
 use Domain\User\Collections\UserCollection;
 use Tests\Domain\User\UserModuleIntegrationTestCase;
 
-class UserQueryBuilder extends UserModuleIntegrationTestCase
+class UserQueryBuilderTest extends UserModuleIntegrationTestCase
 {
     public function testShouldSearchAllExistingUsersWithPostTop(): void
     {
@@ -30,5 +28,23 @@ class UserQueryBuilder extends UserModuleIntegrationTestCase
         $userCollectionResponse = User::query()->searchAllUsersWithPostTop();
 
         $this->assertTrue($userCollectionResponse->isEmpty());
+    }
+
+    public function testShouldSearchAllUserExistingWithPosts(): void
+    {
+        /** @var UserCollection $userCollection */
+        $userCollection = User::factory()
+                        ->hasPosts(1)
+                        ->count(2)
+                        ->create();
+        $userCollection->load('posts');
+
+        /** @var UserCollection response */
+        $response = User::query()->searchAllOrderedByRatingWithPosts();
+
+        $this->assertEquals(
+            $userCollection->sortBy('rating')->values()->toArray(), 
+            $response->toArray()
+        );
     }
 }

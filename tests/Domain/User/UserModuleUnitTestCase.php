@@ -25,6 +25,15 @@ abstract class UserModuleUnitTestCase extends UnitTestCase
         return $this->queryBuilder = $this->queryBuilder ?? $this->mock(UserQueryBuilder::class);
     }
 
+    public function shouldMakeUserQueryBuilder(): void
+    {
+        $this->userModel()
+        ->shouldReceive('query')
+        ->withNoArgs()
+        ->andReturn($this->userQueryBuilder());
+    }
+
+
     public function shouldSearchUserWithPostTop(UserCollection $return): void
     {
         $this->userQueryBuilder()
@@ -32,9 +41,16 @@ abstract class UserModuleUnitTestCase extends UnitTestCase
             ->withNoArgs()
             ->once()
             ->andReturn($return);
-        $this->userModel()
-            ->shouldReceive('query')
+        $this->shouldMakeUserQueryBuilder();
+    }
+
+    public function shouldSearchAllUserOrderedByRatingWithPosts(UserCollection $return): void
+    {
+        $this->userQueryBuilder()
+            ->shouldReceive('searchAllOrderedByRatingWithPosts')
             ->withNoArgs()
-            ->andReturn($this->userQueryBuilder());
+            ->once()
+            ->andReturn($return);
+        $this->shouldMakeUserQueryBuilder();
     }
 }

@@ -8,6 +8,7 @@ use Domain\User\User;
 use Domain\Post\Factory\PostFactory;
 use Illuminate\Database\Eloquent\Model;
 use Domain\Post\Queries\PostQueryBuilder;
+use Domain\Post\Collections\PostCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -46,6 +47,11 @@ class Post extends Model
         return new PostQueryBuilder($query);
     }
 
+    public function newCollection(array $models = []): PostCollection
+    {
+        return new PostCollection($models);
+    }
+
     public function getUser(): ?User
     {
         return $this->relationLoaded('user') ? $this->getRelationValue('user'): null;
@@ -69,5 +75,10 @@ class Post extends Model
     public function getRating(): int
     {
         return $this->rating;
+    }
+
+    public function getUserId(): string
+    {
+        return $this->user_id;
     }
 }

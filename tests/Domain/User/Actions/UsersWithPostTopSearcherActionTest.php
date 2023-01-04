@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Domain\User\Actions;
 
-use Domain\User\User;
 use Tests\Domain\User\UserModuleUnitTestCase;
-use Tests\Domain\User\Factories\UserCollectionFactory;
 use Domain\User\Actions\UsersWithPostTopSearcherAction;
 use Tests\Domain\User\Factories\UserCollectionWithPostTopFactory;
 
