@@ -11,8 +11,8 @@ class PostFactory
     public static function create(
         int $id = 1,
         int $userId = 1, 
-        string $title = '',
-        string $body = '',
+        ?string $title = null,
+        ?string $body = null,
     ): Post
     {
         return new Post([

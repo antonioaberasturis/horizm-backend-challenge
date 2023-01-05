@@ -10,9 +10,9 @@ class UserFactory
 {
     public static function create(
         int $id = 1, 
-        string $name = '',
-        string $email = '',
-        string $city = '',
+        ?string $name = null,
+        ?string $email = null,
+        ?string $city = null,
     ): User
     {
         return new User([
