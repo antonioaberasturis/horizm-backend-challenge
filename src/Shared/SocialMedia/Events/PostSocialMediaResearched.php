@@ -11,6 +11,7 @@ class PostSocialMediaResearched
         public string $title,
         public string $body,
         public int $userId,
+        public float $rating,
     ) {
     }
 }

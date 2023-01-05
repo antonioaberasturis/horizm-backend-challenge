@@ -38,6 +38,7 @@ class PostsWithUserResearcherAction
                 title:  $post->title,
                 body:   $post->body,
                 userId: $post->userId,
+                rating: $this->ratingCalculator->__invoke($post)
             ));
         }
     }
