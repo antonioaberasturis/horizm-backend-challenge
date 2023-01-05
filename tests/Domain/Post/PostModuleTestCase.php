@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Domain\Post;
 
+use Tests\TestCase;
 use Domain\Post\Post;
 use Mockery\MockInterface;
-use Tests\Shared\UnitTestCase;
 use Domain\Post\Queries\PostQueryBuilder;
 
-abstract class PostModuleUnitTestCase extends UnitTestCase
+abstract class PostModuleTestCase extends TestCase
 {
     protected Post $post;
     protected Post $postExisting;
@@ -69,10 +69,10 @@ abstract class PostModuleUnitTestCase extends UnitTestCase
             ->andReturnNull();
     }
 
-    protected function shouldUpdateBody(string $body): void
+    protected function shouldNewBody(string $body): void
     {
         $this->postModelExisting()
-            ->shouldReceive('updateBody')
+            ->shouldReceive('newBody')
             ->with($body)
             ->once()
             ->andReturnNull();
@@ -82,6 +82,15 @@ abstract class PostModuleUnitTestCase extends UnitTestCase
     {
         $this->postModel()
             ->shouldReceive('save')
+            ->withNoArgs()
+            ->once()
+            ->andReturn($return);
+    }
+
+    protected function shouldUpdateModelExisting(bool $return): void
+    {
+        $this->postModelExisting()
+            ->shouldReceive('update')
             ->withNoArgs()
             ->once()
             ->andReturn($return);

@@ -60,4 +60,11 @@ class PostFactory extends Factory
                 'rating' => $rating,
         ]);
     }
+
+    public function externalId(string $externalId): static
+    {
+        return $this->state(fn(array $attributes) => [
+                'external_id' => $externalId,
+        ]);
+    }
 }

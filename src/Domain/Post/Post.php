@@ -57,6 +57,11 @@ class Post extends Model
         return $this->relationLoaded('user') ? $this->getRelationValue('user'): null;
     }
 
+    public function newBody(string $body): void
+    {
+        $this->body = $body;
+    }
+
     public function getId(): string
     {
         return $this->id;

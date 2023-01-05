@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
-use Domain\User\Listeners\InsertUserOnUserSocialMediaResearched;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
+use Shared\SocialMedia\Events\PostSocialMediaResearched;
+use Shared\SocialMedia\Events\UserSocialMediaResearched;
+use Domain\Post\listeners\InsertPostOnPostSocialMediaResearched;
+use Domain\User\Listeners\InsertUserOnUserSocialMediaResearched;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
-use Shared\SocialMedia\Events\UserSocialMediaResearched;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserSocialMediaResearched::class => [
             InsertUserOnUserSocialMediaResearched::class,
+        ],
+        PostSocialMediaResearched::class => [
+            InsertPostOnPostSocialMediaResearched::class,
         ],
     ];
 
