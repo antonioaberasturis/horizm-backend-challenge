@@ -19,6 +19,7 @@ class UserFactory extends Factory
 
         return [
             'id' => $faker->uuid(),
+            'external_id' => $faker->numberBetween(1, 100),
             'name' => $faker->name(),
             'email' => $faker->safeEmail(),
             'city' => $faker->city(),
@@ -41,10 +42,31 @@ class UserFactory extends Factory
         ]);
     }
 
+    public function email(string $email): static
+    {
+        return $this->state(fn(array $attributes) => [
+                'email' => $email,
+        ]);
+    }
+
+    public function city(string $city): static
+    {
+        return $this->state(fn(array $attributes) => [
+                'city' => $city,
+        ]);
+    }
+
     public function postId(string $postId): static
     {
         return $this->state(fn(array $attributes) => [
                 'top_post_id' => $postId,
+        ]);
+    }
+
+    public function externalId(string $externalId): static
+    {
+        return $this->state(fn(array $attributes) => [
+                'external_id' => $externalId,
         ]);
     }
 }

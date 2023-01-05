@@ -25,11 +25,16 @@ class User extends Model
 
     protected $fillable = [
         'id',
+        'external_id',
         'name',
         'email',
         'city',
         'rating',
         'top_post_id'
+    ];
+
+    protected $casts = [
+        'external_id' => 'string'
     ];
 
     public static function newFactory(): UserFactory
@@ -85,5 +90,10 @@ class User extends Model
     public function getCity(): string
     {
         return $this->city;
+    }
+
+    public function getExternalId(): string
+    {
+        return $this->external_id;
     }
 }

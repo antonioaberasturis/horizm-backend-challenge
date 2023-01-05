@@ -53,4 +53,31 @@ abstract class UserModuleUnitTestCase extends UnitTestCase
             ->andReturn($return);
         $this->shouldMakeUserQueryBuilder();
     }
+
+    protected function shouldFindByExternalId(string $id, ?User $return = null): void
+    {
+        $this->userQueryBuilder()
+            ->shouldReceive('findByExternalId')
+            ->with($id)
+            ->once()
+            ->andReturn($return);
+    }
+
+    protected function shouldFill(array $datas): void
+    {
+        $this->userModel()
+            ->shouldReceive('fill')
+            ->with($datas)
+            ->once()
+            ->andReturnNull();
+    }
+
+    protected function shouldSave(bool $return): void
+    {
+        $this->userModel()
+            ->shouldReceive('save')
+            ->withNoArgs()
+            ->once()
+            ->andReturn($return);
+    }
 }

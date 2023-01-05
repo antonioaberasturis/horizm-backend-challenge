@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Domain\User\Queries;
 
 use Domain\Post\Post;
@@ -46,5 +48,24 @@ class UserQueryBuilderTest extends UserModuleIntegrationTestCase
             $userCollection->sortBy('rating')->values()->toArray(), 
             $response->toArray()
         );
+    }
+
+    public function testShouldFindByExternalIdAExistingUser(): void
+    {
+        /** @var User user */
+        $user = User::factory()->externalId('1')->create();
+
+        /** @var User response */
+        $response = User::query()->findByExternalId($user->getExternalId());
+
+        $this->assertEquals($user->getAttributes(), $response->getAttributes());
+    }
+
+    public function testShouldNotFindByExternalIdANotExistingUser(): void
+    {
+        /** @var User response */
+        $response = User::query()->findByExternalId('1');
+
+        $this->assertNull($response);
     }
 }
