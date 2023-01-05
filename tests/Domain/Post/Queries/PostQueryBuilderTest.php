@@ -31,4 +31,24 @@ class PostQueryBuilderTest extends PostModuleIntegrationTestCase
 
         $this->assertNull($postResponse);
     }
+    
+    public function testShouldFindByExternalIdAnExistingPost(): void
+    {
+
+        /** @var Post post */
+        $post = Post::factory()->forUser()->externalId('1')->create();
+
+        /** @var Post response */
+        $response = Post::query()->findByExternalId($post->getExternalId());
+
+        $this->assertEquals($post->getAttributes(), $response->getAttributes());
+    }
+
+    public function testShouldNotFindByExternalIdANotExistingUser(): void
+    {
+        /** @var Post response */
+        $response = Post::query()->findByExternalId('1');
+
+        $this->assertNull($response);
+    }
 }

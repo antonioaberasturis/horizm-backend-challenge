@@ -86,4 +86,9 @@ class Post extends Model
     {
         return $this->user_id;
     }
+
+    public function getExternalId(): string
+    {
+        return $this->external_id;
+    }
 }

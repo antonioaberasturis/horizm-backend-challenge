@@ -17,4 +17,9 @@ class PostQueryBuilder extends Builder
                 ->limit(1)
                 ->first();
     }
+
+    public function findByExternalId(string $id): ?Post
+    {
+        return $this->where('external_id', $id)->limit(1)->first();
+    }
 }
