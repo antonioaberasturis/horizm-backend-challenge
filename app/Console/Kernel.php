@@ -7,6 +7,10 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+    protected $commands = [
+        \Application\Console\SocialMedia\ResearchSocialMediaCommand::class
+    ];
+
     /**
      * Define the application's command schedule.
      *

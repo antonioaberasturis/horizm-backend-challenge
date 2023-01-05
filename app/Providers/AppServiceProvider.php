@@ -13,7 +13,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(
+            \Shared\SocialMedia\Services\Typicode\TypicodeClientInterface::class, 
+            function($app){
+                return new \Shared\SocialMedia\Services\Typicode\TypicodeClient();
+            }
+        );
     }
 
     /**
