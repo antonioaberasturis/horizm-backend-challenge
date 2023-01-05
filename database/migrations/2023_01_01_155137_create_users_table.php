@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('city');
-            $table->unsignedSmallInteger('rating');
+            $table->unsignedSmallInteger('rating')->default(0);
             $table->uuid('top_post_id')->nullable();
             $table->timestamps();
 

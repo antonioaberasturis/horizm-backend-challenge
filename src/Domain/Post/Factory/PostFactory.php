@@ -19,6 +19,7 @@ class PostFactory extends Factory
         
         return [
             'id' => $faker->uuid(),
+            'external_id' => $faker->numberBetween(1, 100),
             'user_id' => UserFactory::class,
             'title' => $faker->realText(150),
             'body' => $faker->realText(250),
