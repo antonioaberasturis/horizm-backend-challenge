@@ -6,6 +6,7 @@ namespace Tests\Shared\SocialMedia\Actions;
 
 
 use Illuminate\Support\Facades\Event;
+use Shared\SocialMedia\Actions\PostRatingCalculatorAction;
 use Tests\Shared\SocialMedia\Factories\UserFactory;
 use Shared\SocialMedia\Events\PostSocialMediaResearched;
 use Shared\SocialMedia\Events\UserSocialMediaResearched;
@@ -23,7 +24,8 @@ class PostsWithUserResearcherActionTest extends SocialMediaModuleUnitTestCase
         parent::setUp();
         
         $this->researcher = new PostsWithUserResearcherAction(
-                                $this->typicodeService()
+                                $this->typicodeService(),
+                                app()->make(PostRatingCalculatorAction::class)
                             );
     }
 

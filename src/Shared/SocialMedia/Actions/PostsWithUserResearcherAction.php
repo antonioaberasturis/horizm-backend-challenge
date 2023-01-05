@@ -13,7 +13,8 @@ use Shared\SocialMedia\Services\Typicode\Resources\PostCollection;
 class PostsWithUserResearcherAction
 {
     public function __construct(
-        private TypicodeClientInterface $typicodeService
+        private TypicodeClientInterface $typicodeService,
+        private PostRatingCalculatorAction $ratingCalculator
     ) {  
     }
     public function __invoke(): void
