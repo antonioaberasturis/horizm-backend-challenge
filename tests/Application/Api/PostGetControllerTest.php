@@ -8,20 +8,33 @@ use Domain\Post\Post;
 use Domain\User\User;
 use Illuminate\Support\Str;
 use Domain\Post\Resources\PostByIdResource;
+use Illuminate\Support\Facades\Event;
 use Tests\Application\ApiApplicationAcceptanceTestCase;
 use Tests\Application\Api\Factories\PostGetControllerResponseFactory;
+use Tests\Shared\SocialMedia\Factories\PostSocialMediaResearchedFactory;
+use Tests\Shared\SocialMedia\Factories\UserSocialMediaResearchedFactory;
 
 class PostGetControllerTest extends ApiApplicationAcceptanceTestCase
 {
     public function testShouldGetAPost(): void
     { 
-        $post = PostGetControllerResponseFactory::create();
+        $user = UserSocialMediaResearchedFactory::create();
+        $post = PostSocialMediaResearchedFactory::create(
+            userId: $user->id,
+        );
+        Event::dispatch($user);
+        Event::dispatch($post);
 
-        $response = $this->get("api/posts/".$post['id']);
+        $response = $this->get("api/posts/".$post->uuid);
 
         $response
             ->assertStatus(200)
-            ->assertExactJson($post);
+            ->assertExactJson([
+                "id" => $post->uuid,
+                "title" => $post->title,
+                "body" => $post->body,
+                "username" => $user->name,
+            ]);
     }
 
     public function testShouldNotFoundResourceWhenFindANotExistingPost(): void
