@@ -69,4 +69,10 @@ class UserFactory extends Factory
                 'external_id' => $externalId,
         ]);
     }
+    public function rating(string $rating): static
+    {
+        return $this->state(fn(array $attributes) => [
+                'rating' => $rating,
+        ]);
+    }
 }

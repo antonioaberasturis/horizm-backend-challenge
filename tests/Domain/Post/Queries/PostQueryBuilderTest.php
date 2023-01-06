@@ -4,6 +4,7 @@ namespace Tests\Domain\Post\Queries;
 
 use Domain\Post\Post;
 use Domain\User\User;
+use Domain\Post\Collections\PostCollection;
 use Tests\Domain\Post\PostModuleIntegrationTestCase;
 
 class PostQueryBuilderTest extends PostModuleIntegrationTestCase
@@ -50,5 +51,30 @@ class PostQueryBuilderTest extends PostModuleIntegrationTestCase
         $response = Post::query()->findByExternalId('1');
 
         $this->assertNull($response);
+    }
+
+    public function testShouldSearchAllExistingPostByUserId(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        /** @var PostCollection $posts */
+        $posts = Post::factory()->for($user)->count(1)->create();
+
+        /** @var PostCollection $response */
+        $response = Post::query()->searchAllPostByUserId($user->getId());
+
+        $this->assertEquals($posts->count(), $response->count());
+        $this->assertTrue($posts->first()->is($response->first()));
+    }
+
+    public function testShouldNotSearchAllNotExistingPostByUserId(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->make();
+
+        /** @var PostCollection $response */
+        $response = Post::query()->searchAllPostByUserId($user->getId());
+
+        $this->assertTrue($response->isEmpty());
     }
 }

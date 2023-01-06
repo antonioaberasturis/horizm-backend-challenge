@@ -30,6 +30,9 @@ class EventServiceProvider extends ServiceProvider
         PostSocialMediaResearched::class => [
             InsertPostOnPostSocialMediaResearched::class,
         ],
+        PostCreated::class => [
+            RateUserOnPostCreated::class,
+        ],
     ];
 
     /**

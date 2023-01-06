@@ -34,7 +34,8 @@ class User extends Model
     ];
 
     protected $casts = [
-        'external_id' => 'string'
+        'external_id' => 'string',
+        'rating' => 'int',
     ];
 
     public static function newFactory(): UserFactory
@@ -95,5 +96,10 @@ class User extends Model
     public function getExternalId(): string
     {
         return $this->external_id;
+    }
+
+    public function setRating(int $rating): void
+    {
+        $this->rating = $rating;
     }
 }

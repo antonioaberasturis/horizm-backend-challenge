@@ -6,6 +6,7 @@ namespace Domain\Post\Queries;
 
 use Domain\Post\Post;
 use Illuminate\Database\Eloquent\Builder;
+use Domain\Post\Collections\PostCollection;
 
 class PostQueryBuilder extends Builder
 {
@@ -21,5 +22,10 @@ class PostQueryBuilder extends Builder
     public function findByExternalId(string $id): ?Post
     {
         return $this->where('external_id', $id)->limit(1)->first();
+    }
+
+    public function searchAllPostByUserId(string $userId): PostCollection
+    {
+        return $this->where('user_id', $userId)->get();
     }
 }

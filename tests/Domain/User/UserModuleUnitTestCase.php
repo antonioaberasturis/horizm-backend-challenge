@@ -9,11 +9,13 @@ use Mockery\MockInterface;
 use Tests\Shared\UnitTestCase;
 use Domain\User\Queries\UserQueryBuilder;
 use Domain\User\Collections\UserCollection;
+use Domain\Post\Actions\AllPostSearcherByUserIdAction;
 
 abstract class UserModuleUnitTestCase extends UnitTestCase
 {
     protected User $user;
     protected UserQueryBuilder $queryBuilder;
+    protected AllPostSearcherByUserIdAction $allPostSearcherByUserId;
 
     protected function userModel(): MockInterface|User
     {
@@ -23,6 +25,11 @@ abstract class UserModuleUnitTestCase extends UnitTestCase
     protected function userQueryBuilder(): MockInterface|UserQueryBuilder
     {
         return $this->queryBuilder = $this->queryBuilder ?? $this->mock(UserQueryBuilder::class);
+    }
+
+    protected function allPostSearcherByUserId(): MockInterface|AllPostSearcherByUserIdAction 
+    {
+        return $this->allPostSearcherByUserId = $this->allPostSearcherByUserId ?? $this->mock(AllPostSearcherByUserIdAction::class);
     }
 
     public function shouldMakeUserQueryBuilder(): void
