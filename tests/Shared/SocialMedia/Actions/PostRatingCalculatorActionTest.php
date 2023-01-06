@@ -16,6 +16,6 @@ class PostRatingCalculatorActionTest extends SocialMediaModuleUnitTestCase
         /** @var PostRatingCalculatorAction $calculator */
         $calculator = app()->make(PostRatingCalculatorAction::class);
 
-        $this->assertEquals(1.28, $calculator->__invoke($post));
+        $this->assertEquals(1, $calculator->__invoke($post));
     }
 }

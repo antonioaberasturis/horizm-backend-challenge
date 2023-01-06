@@ -36,7 +36,6 @@ class PostsWithUserResearcherAction
                 city:   $user->address->city,
             ));
             $postUuid = Str::uuid()->toString();
-            \Log::info('user:post', ["{$userUuid}:{$postUuid}"]);
             event(new PostSocialMediaResearched(
                 id:         $post->id,
                 uuid:       $postUuid,

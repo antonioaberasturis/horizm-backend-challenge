@@ -8,7 +8,7 @@ use Shared\SocialMedia\Services\Typicode\Resources\Post;
 
 class PostRatingCalculatorAction
 {
-    public function __invoke(Post $post): float
+    public function __invoke(Post $post): int
     {
         $rating_count_based1 = str_word_count($post->body);
         $rating_count_based2 = str_word_count($post->title);
@@ -20,6 +20,6 @@ class PostRatingCalculatorAction
         
         if($rating_count === 0) return 0.00;
         
-        return round($point_count / $rating_count , 2);
+        return (int) round($point_count / $rating_count);
     }
 }
