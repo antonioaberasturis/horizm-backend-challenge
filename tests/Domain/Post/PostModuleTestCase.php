@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace Tests\Domain\Post;
 
+use Domain\Post\Actions\PostUpdaterAction;
 use Tests\TestCase;
 use Domain\Post\Post;
 use Mockery\MockInterface;
 use Domain\Post\Queries\PostQueryBuilder;
+use Domain\User\Actions\UserFinderByExternalIdAction;
 
 abstract class PostModuleTestCase extends TestCase
 {
     protected Post $post;
     protected Post $postExisting;
     protected PostQueryBuilder $queryBuilder;
+    protected UserFinderByExternalIdAction $userFinderByExternalIdAction;
+    protected PostUpdaterAction $postUpdaterAction;
 
     protected function postModel(): MockInterface|Post
     {
@@ -23,6 +27,16 @@ abstract class PostModuleTestCase extends TestCase
     protected function postModelExisting(): MockInterface|Post
     {
         return $this->postExisting = $this->postExisting ?? $this->mock(Post::class);
+    }
+
+    protected function userFinderByExternalIdAction(): MockInterface|UserFinderByExternalIdAction
+    {
+        return $this->userFinderByExternalIdAction = $this->userFinderByExternalIdAction ?? $this->mock(UserFinderByExternalIdAction::class);
+    }
+
+    protected function postUpdaterAction(): MockInterface|PostUpdaterAction
+    {
+        return $this->postUpdaterAction = $this->postUpdaterAction ?? $this->mock(PostUpdaterAction::class);
     }
 
     protected function postQueryBuilder(): MockInterface|PostQueryBuilder
@@ -94,5 +108,14 @@ abstract class PostModuleTestCase extends TestCase
             ->withNoArgs()
             ->once()
             ->andReturn($return);
+    }
+
+    public function shouldNotFindUserByExternalId(string $externalId): void
+    {
+        $this->userFinderByExternalIdAction()
+            ->shouldReceive('__invoke')
+            ->with($externalId)
+            ->once()
+            ->andReturnNull();
     }
 }

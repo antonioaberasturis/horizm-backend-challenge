@@ -32,7 +32,7 @@ class InsertPostOnPostSocialMediaResearched
     public function handle(PostSocialMediaResearched $event)
     {
         $postSocialMediaData = new PostSocialMediaData(
-            id:         Str::uuid()->toString(),
+            id:         $event->uuid,
             externalId: (string) $event->id,
             userId:     (string) $event->userId,
             title:      $event->title,

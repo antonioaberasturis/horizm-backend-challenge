@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Domain\Post\Actions;
 
 use Domain\Post\Post;
-use Domain\Post\Events\PostUpdated;
-use Domain\Post\DataTransferObjects\PostSocialMediaData;
 use Domain\Post\Events\PostCreated;
+use Domain\Post\Events\PostUpdated;
+use Domain\User\Exceptions\UserNotFoundException;
+use Domain\User\Actions\UserFinderByExternalIdAction;
+use Domain\Post\DataTransferObjects\PostSocialMediaData;
 
 class PostCreatorAction
 {
     public function __construct(
-        private Post $post
+        private Post $post,
+        private UserFinderByExternalIdAction $userFinder,
+        private PostUpdaterAction $updater,
     ) {  
     }
 
@@ -21,22 +25,18 @@ class PostCreatorAction
         /** @var Post $post */
         $post = $this->post->query()->findByExternalId($data->externalId);
 
-        if(null !== $post) {
-            $post->newBody($data->body);
-            $post->update();
+        if(null !== $post){
+            return $this->updater->__invoke($post, $data);
+        }
 
-            event(new PostUpdated(
-                $post->getId(),
-                $post->getUserId(),
-                $post->getBody(),
-            ));
-
-            return $post;
+        $user = $this->userFinder->__invoke($data->userId);
+        if(null === $user){
+            throw new UserNotFoundException();
         }
 
         $this->post->fill([
             'id' => $data->id,
-            'user_id' => $data->userId,
+            'user_id' => $user->getId(),
             'external_id' => $data->externalId,
             'title' => $data->title,
             'body' => $data->body,

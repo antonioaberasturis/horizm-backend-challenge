@@ -2,6 +2,7 @@
 
 namespace Tests\Domain\Post\Factories;
 
+use Domain\User\User;
 use Illuminate\Support\Str;
 use Domain\Post\DataTransferObjects\PostSocialMediaData;
 
@@ -27,12 +28,12 @@ class PostSocialMediaDataFactory
         );
     }
     
-    public static function fromSelfAsArray(PostSocialMediaData $datas): array
+    public static function fromSelfAsArray(PostSocialMediaData $datas, User $user): array
     {
         return [
             'id' => $datas->id,
             'external_id' => $datas->externalId,
-            'user_id' => $datas->userId,
+            'user_id' => $user->getId(),
             'title' => $datas->title,
             'body' => $datas->body,
             'rating' => $datas->rating,

@@ -34,7 +34,7 @@ class InsertUserOnUserSocialMediaResearched
     public function handle(UserSocialMediaResearched $event)
     {
         $userSocialMediaData = new UserSocialMediaData(
-            id:         Str::uuid()->toString(),
+            id:         $event->uuid,
             externalId: (string) $event->id,
             name:       $event->name,
             email:      $event->email,

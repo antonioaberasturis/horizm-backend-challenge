@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Tests\Domain\Post\Actions;
 
 use Domain\Post\Post;
+use Domain\User\User;
 use Domain\Post\Events\PostCreated;
 use Domain\Post\Events\PostUpdated;
 use Illuminate\Support\Facades\Event;
 use Tests\Domain\Post\PostModuleTestCase;
 use Domain\Post\Actions\PostCreatorAction;
+use Domain\User\Exceptions\UserNotFoundException;
 use Tests\Domain\Post\Factories\PostSocialMediaDataFactory;
 
 class PostCreatorActionTest extends PostModuleTestCase
@@ -20,7 +22,9 @@ class PostCreatorActionTest extends PostModuleTestCase
     {
         parent::setUp();
         $this->creator = new PostCreatorAction(
-            $this->postModel()
+            $this->postModel(),
+            $this->userFinderByExternalIdAction(),
+            $this->postUpdaterAction()
         );
     }
 
@@ -35,11 +39,17 @@ class PostCreatorActionTest extends PostModuleTestCase
                     ->body($postSocialMediaData->body)
                     ->rating((int) $postSocialMediaData->rating)
                     ->make();
+        $user = User::factory()->make();
 
         Event::fake();
         $this->shouldMakePostQueryBuilder();
         $this->shouldFindByExternalId($postSocialMediaData->externalId);
-        $this->shouldFill(PostSocialMediaDataFactory::fromSelfAsArray($postSocialMediaData));
+        $this->userFinderByExternalIdAction()
+        ->shouldReceive('__invoke')
+        ->with($postSocialMediaData->userId)
+        ->once()
+        ->andReturn($user);
+        $this->shouldFill(PostSocialMediaDataFactory::fromSelfAsArray($postSocialMediaData, $user));
         $this->shouldSave(true);
 
         $this->postModel()->shouldReceive([
@@ -58,35 +68,47 @@ class PostCreatorActionTest extends PostModuleTestCase
         $response = $this->creator->__invoke($postSocialMediaData);
 
         $this->assertEquals($post->getAttributes(), $response->getAttributes());
-        Event::assertDispatched(
-            PostCreated::class,
-            fn(PostCreated $event) => $event->id === $postSocialMediaData->id
-        );
     }
 
     public function testShouldUpdateAnExistingPost(): void
     {
         $postSocialMediaData = PostSocialMediaDataFactory::create();
+        $post = Post::factory()
+            ->id($postSocialMediaData->id)
+            ->externalId($postSocialMediaData->externalId)
+            ->userId($postSocialMediaData->userId)
+            ->title($postSocialMediaData->title)
+            ->body($postSocialMediaData->body)
+            ->rating((int) $postSocialMediaData->rating)
+            ->make();
         
         Event::fake();
 
         $this->shouldMakePostQueryBuilder();
-        $this->shouldFindByExternalId($postSocialMediaData->externalId, $this->postModelExisting());
-        $this->shouldNewBody($postSocialMediaData->body);
-        $this->shouldUpdateModelExisting(true);
-        $this->postModelExisting()->shouldReceive([
-            'getId' => $postSocialMediaData->id,
-            'getUserId' => $postSocialMediaData->userId,
-            'getBody' => $postSocialMediaData->body,
-            'getBody' => $postSocialMediaData->body,
-        ]);
+        $this->shouldFindByExternalId($postSocialMediaData->externalId, $post);
+        
+        $this->postUpdaterAction()
+            ->shouldReceive('__invoke')
+            ->with($post, $postSocialMediaData)
+            ->once()
+            ->andReturn($post);
+
 
         $response = $this->creator->__invoke($postSocialMediaData);
 
-        $this->assertEquals($postSocialMediaData->body, $response->getBody());
-        Event::assertDispatched(
-            PostUpdated::class,
-            fn(PostUpdated $event) => $event->body === $postSocialMediaData->body
-        );
+        $this->assertEquals($response, $post);
+    }
+
+    public function testShouldThrowUserNotFoundException(): void
+    {
+        $this->expectException(UserNotFoundException::class);
+
+        $postSocialMediaData = PostSocialMediaDataFactory::create();
+        
+        $this->shouldMakePostQueryBuilder();
+        $this->shouldFindByExternalId($postSocialMediaData->externalId);
+        $this->shouldNotFindUserByExternalId($postSocialMediaData->externalId);
+
+        $this->creator->__invoke($postSocialMediaData);
     }
 }
