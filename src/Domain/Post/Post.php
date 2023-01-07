@@ -31,6 +31,7 @@ class Post extends Model
 
     protected $casts = [
         'rating' => 'int',
+        'external_id' => 'string',
     ];
 
     public static function newFactory(): PostFactory
