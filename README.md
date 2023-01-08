@@ -1,11 +1,18 @@
-## Install the dependencies:
+### Install the dependencies:
 
 `composer install`
 
 
-## Migrate the database:
+### Migrate the database:
 
 `php artisan migrate`
+
+### Run the test:
+
+`php artisan test`
+
+`php artisan test --parallel`
+
 
 
 ### Migrate the data in the application:
@@ -13,11 +20,11 @@
 `php artisan socialmedia:research`
 
 
-## Start the server:
+### Start the server:
 
 `php artisan serve`
 
-## Consume the APIs:
+### Consume the APIs:
 
 - [http://localhost:8000/api/users](http://localhost:8000/api/users)
 - [http://localhost:8000/api/posts/top](http://localhost:8000/api/posts/top)
