@@ -10,16 +10,24 @@ use Tests\Shared\UnitTestCase;
 use Domain\User\Queries\UserQueryBuilder;
 use Domain\User\Collections\UserCollection;
 use Domain\Post\Actions\AllPostSearcherByUserIdAction;
+use Domain\Post\Actions\TopPostSearcherByUserIdAction;
 
 abstract class UserModuleUnitTestCase extends UnitTestCase
 {
     protected User $user;
+    protected User $userExisting;
     protected UserQueryBuilder $queryBuilder;
     protected AllPostSearcherByUserIdAction $allPostSearcherByUserId;
+    protected TopPostSearcherByUserIdAction $topPostSearcherByUserId;
 
     protected function userModel(): MockInterface|User
     {
         return $this->user = $this->user ?? $this->mock(User::class);
+    }
+
+    protected function userExisting(): MockInterface|User
+    {
+        return $this->userExisting = $this->userExisting ?? $this->mock(User::class);
     }
 
     protected function userQueryBuilder(): MockInterface|UserQueryBuilder
@@ -30,6 +38,11 @@ abstract class UserModuleUnitTestCase extends UnitTestCase
     protected function allPostSearcherByUserId(): MockInterface|AllPostSearcherByUserIdAction 
     {
         return $this->allPostSearcherByUserId = $this->allPostSearcherByUserId ?? $this->mock(AllPostSearcherByUserIdAction::class);
+    }
+
+    protected function topPostSearcherByUserId(): MockInterface|TopPostSearcherByUserIdAction 
+    {
+        return $this->topPostSearcherByUserId = $this->topPostSearcherByUserId ?? $this->mock(TopPostSearcherByUserIdAction::class);
     }
 
     public function shouldMakeUserQueryBuilder(): void

@@ -5,6 +5,7 @@ namespace Tests\Domain\Post\Queries;
 use Domain\Post\Post;
 use Domain\User\User;
 use Domain\Post\Collections\PostCollection;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\Domain\Post\PostModuleIntegrationTestCase;
 
 class PostQueryBuilderTest extends PostModuleIntegrationTestCase
@@ -76,5 +77,31 @@ class PostQueryBuilderTest extends PostModuleIntegrationTestCase
         $response = Post::query()->searchAllPostByUserId($user->getId());
 
         $this->assertTrue($response->isEmpty());
+    }
+
+    public function testShouldSearchExistingTopPost(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        /** @var Post $post1 */
+        $post1 = Post::factory()->for($user)->rating(1)->create();
+        /** @var Post $post2 */
+        $post2 = Post::factory()->for($user)->rating(5)->create();
+
+        /** @var Post $response */
+        $response = Post::query()->searchTopPostByUserId($user->getId());
+
+        $this->assertEquals($post2->getId(), $response->getId());
+    }
+
+    public function testShouldNotSearchNotExistingTopPost(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->make();
+
+        /** @var Post $response */
+        $response = Post::query()->searchTopPostByUserId($user->getId());
+
+        $this->assertNull($response);
     }
 }

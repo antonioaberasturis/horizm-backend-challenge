@@ -6,7 +6,6 @@ namespace Domain\Post\Factory;
 
 use Domain\Post\Post;
 use Domain\User\Factory\UserFactory;
-use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PostFactory extends Factory
@@ -15,15 +14,14 @@ class PostFactory extends Factory
 
     public function definition(): array
     {
-        $faker = FakerFactory::create();
         
         return [
-            'id' => $faker->uuid(),
-            'external_id' => $faker->numberBetween(1, 100),
+            'id' => $this->faker->uuid(),
+            'external_id' => $this->faker->numberBetween(1, 100),
             'user_id' => UserFactory::class,
-            'title' => $faker->realText(150),
-            'body' => $faker->realText(250),
-            'rating' => $faker->numberBetween(1, 5),
+            'title' => $this->faker->realText(150),
+            'body' => $this->faker->realText(250),
+            'rating' => $this->faker->numberBetween(1, 5),
         ];
     }
 

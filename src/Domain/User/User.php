@@ -102,4 +102,9 @@ class User extends Model
     {
         $this->rating = $rating;
     }
+
+    public function setTopPostId(string $postId): void
+    {
+        $this->top_post_id = $postId;
+    }
 }

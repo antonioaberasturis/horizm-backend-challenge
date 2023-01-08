@@ -28,4 +28,12 @@ class PostQueryBuilder extends Builder
     {
         return $this->where('user_id', $userId)->get();
     }
+    public function searchTopPostByUserId(string $userId): ?Post
+    {
+        return $this->where('user_id', $userId)
+                    ->orderByDesc('rating')
+                    ->orderByDesc('updated_at')
+                    ->limit(1)
+                    ->first();
+    }
 }

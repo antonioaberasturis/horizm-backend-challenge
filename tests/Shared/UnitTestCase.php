@@ -4,23 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Shared;
 
-use Faker\Factory;
-use Faker\Generator;
-use Mockery;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Mockery\MockInterface;
+use Tests\TestCase;
 
-abstract class UnitTestCase extends MockeryTestCase
+abstract class UnitTestCase extends TestCase
 {
-    protected static $faker;
 
-    protected function mock(string $className): MockInterface
-    {
-        return Mockery::mock($className);
-    }
-
-    protected function faker(): Generator
-    {
-        return static::$faker = static::$faker ?? Factory::create();
-    }
 }

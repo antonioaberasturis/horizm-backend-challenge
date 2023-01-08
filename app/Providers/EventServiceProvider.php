@@ -10,6 +10,7 @@ use Shared\SocialMedia\Events\UserSocialMediaResearched;
 use Domain\Post\listeners\InsertPostOnPostSocialMediaResearched;
 use Domain\User\Listeners\InsertUserOnUserSocialMediaResearched;
 use Domain\User\Listeners\RateUserOnPostCreated;
+use Domain\User\Listeners\TopPostOnPostCreated;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -32,6 +33,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         PostCreated::class => [
             RateUserOnPostCreated::class,
+            TopPostOnPostCreated::class,
         ],
     ];
 
